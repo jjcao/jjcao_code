@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example1", "example1\example1.vcproj", "{80F21E09-8CDD-4220-BF39-73EA50BF2845}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "leastSquare", "leastSquare\leastSquare.vcproj", "{28A37CE8-6828-441C-B35C-94FDD3594A4A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80F21E09-8CDD-4220-BF39-73EA50BF2845}.Debug|Win32.ActiveCfg = Debug|Win32
+		{80F21E09-8CDD-4220-BF39-73EA50BF2845}.Debug|Win32.Build.0 = Debug|Win32
+		{80F21E09-8CDD-4220-BF39-73EA50BF2845}.Release|Win32.ActiveCfg = Release|Win32
+		{80F21E09-8CDD-4220-BF39-73EA50BF2845}.Release|Win32.Build.0 = Release|Win32
+		{28A37CE8-6828-441C-B35C-94FDD3594A4A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28A37CE8-6828-441C-B35C-94FDD3594A4A}.Debug|Win32.Build.0 = Debug|Win32
+		{28A37CE8-6828-441C-B35C-94FDD3594A4A}.Release|Win32.ActiveCfg = Release|Win32
+		{28A37CE8-6828-441C-B35C-94FDD3594A4A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

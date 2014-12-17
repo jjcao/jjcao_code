@@ -1,0 +1,3 @@
+LIBRARY	"show_pts_vtk"
+EXPORTS
+	mexFunction

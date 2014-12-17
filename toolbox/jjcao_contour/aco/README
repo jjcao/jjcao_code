@@ -1,0 +1,83 @@
+           Contour Correspondence via Ant Colony Optimization
+
+                              Version 1.1
+                              May 12, 2009
+
+                 Oliver van Kaick <ovankaic@cs.sfu.ca>
+                http://www.cs.sfu.ca/~ovankaic/personal/
+
+
+This MATLAB implementation computes a correspondence between two shapes
+based on ant colony optimization (ACO). The input shapes can be either
+two 2D contours (open or closed) or two arbitrary sets of 2D points. The
+algorithm is described in detail in:
+
+    O. van Kaick, G. Hamarneh, H. Zhang, P. Wighton
+    "Contour Correspondence via Ant Colony Optimization"
+    Proc. 15th Pacific Conference on Computer Graphics and Applications
+    (Pacific Graphics 2007), pp. 271-280, 2007.
+    http://dx.doi.org/10.1109/PG.2007.56
+
+The parts of the code specific to the ACO implementation are:
+    Copyright (c) 2007 Oliver van Kaick <ovankaic@cs.sfu.ca>
+See the acknowledgements section for additional code.
+
+
+Running the code
+----------------
+To configure all of the parameters of the algorithm, call 'set_global'
+in the MATLAB prompt. Next, the main function that executes the
+algorithm can be invoked. An example session:
+
+    set_global
+    Y1 = load('contours/fish1.ctr');
+    Y2 = load('contours/fish2.ctr');
+    [K, S, best_cost] = shape_matching(Y1, Y2, 'aco', 'shape_context', '', 'chisquare');
+
+Different visualizations of the same correspondence are then shown.
+
+The function 'shape_matching' serves as a front-end so that other
+matching algorithms or descriptors can be easily incorporated into the
+framework (for comparison purposes). This can be done by changing the
+functions 'shape_matching' or 'extract_descriptor'. The file
+'aco_matching.m' contains the main code for the ACO-based method.  One
+additional algorithm is provided in this package for comparison: the
+well-known bipartite matching.
+
+
+Acknowledgements and code from other sources
+--------------------------------------------
+Code from other sources is already provided here to avoid having to
+download additional files before running the ACO algorithm. The
+different codes are:
+
+    - Shape context code from the shape context demo by Serge Belongie
+      (files sc_compute.m and dist2.m). The demo is available at:
+      http://www.eecs.berkeley.edu/Research/Projects/CS/vision/code/sc_demo/
+      
+    - Hungarian algorithm implementation by Niclas Borlin, also provided
+      with the shape context demo (file hungarian.m).
+
+    - The ACO implementation was built upon a set of functions for
+      computation and visualization of contours, provided by Richard
+      (Hao) Zhang and Varun Jain (see notices in individual files)
+
+    - Some of the example contours in the 'contours' directory were
+      extracted from silhouettes of shapes in the Brown dataset. This
+      dataset is available at:
+      http://www.lems.brown.edu/vision/researchAreas/SIID/
+
+
+Additional code: order-preserving assignment
+--------------------------------------------
+A MEX-C implementation of the circular order-preserving assignment is
+provided by Clay Scott. It is available at :
+      http://www.dsp.rice.edu/software/copap-cyclic-order-preservation-assignment-problem
+      http://www.eecs.umich.edu/~cscott/code.html
+Notice that an older version of this code was used to produce the
+results in the ACO paper.
+
+It should be possible to just download, compile, and add this code to
+the current directory, to be able to run it in the same framework. Use
+the command:
+    [K, S, best_cost] = shape_matching(Y1, Y2, 'order_preserving', 'shape_context', '', 'chisquare');

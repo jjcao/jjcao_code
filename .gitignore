@@ -1,0 +1,6 @@
+ipch/
+Debug/
+Release/
+*.sdf
+*.rar
+*.zip
