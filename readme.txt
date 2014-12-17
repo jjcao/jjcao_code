@@ -11,5 +11,4 @@ https://jjcao-code.googlecode.com/svn/trunk
 	SuiteSparse_DIR (D:\suitesparse-metis-win)
 	GraphiteTwo_DIR (D:\GraphiteTwo)
 
-2. build Graphite-2-a5-src.tar.bz2
-3. \src\packages\third_party\numeric_stuff
+2. build Graphite-2-a5-src.tar.bz2,¹Ø×¢\src\packages\third_party\numeric_stuff
