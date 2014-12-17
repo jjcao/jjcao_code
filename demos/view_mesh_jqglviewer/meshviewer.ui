@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MeshViewerClass</class>
+ <widget class="QMainWindow" name="MeshViewerClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>785</width>
+    <height>506</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MeshViewer</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout_5">
+    <item>
+     <widget class="Viewer" name="viewer" native="true"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>785</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+   </widget>
+   <widget class="QMenu" name="menuSelect_Points">
+    <property name="title">
+     <string>Select Points</string>
+    </property>
+    <addaction name="actionClear_selected"/>
+    <addaction name="actionInvert_selected"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_selected"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuSelect_Points"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar1">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionInvert_Face"/>
+   <addaction name="separator"/>
+   <addaction name="actionInvert_Normal"/>
+   <addaction name="separator"/>
+   <addaction name="actionShow_Whole"/>
+   <addaction name="actionShow_Scalar"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget">
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tabInfo">
+        <attribute name="title">
+         <string>Basic Info</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="labelBasicInfo">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListView" name="listViewPickedVerts"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Tab 2</string>
+        </attribute>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QToolBar" name="toolBar2">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionShortest_Dist"/>
+  </widget>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionInvert_Face">
+   <property name="icon">
+    <iconset resource="meshviewer.qrc">
+     <normaloff>:/MeshViewer/Resources/invertFace.png</normaloff>:/MeshViewer/Resources/invertFace.png</iconset>
+   </property>
+   <property name="text">
+    <string>Invert Face</string>
+   </property>
+   <property name="toolTip">
+    <string>Invert Face</string>
+   </property>
+  </action>
+  <action name="actionInvert_Normal">
+   <property name="icon">
+    <iconset resource="meshviewer.qrc">
+     <normaloff>:/MeshViewer/Resources/invertNormal.png</normaloff>:/MeshViewer/Resources/invertNormal.png</iconset>
+   </property>
+   <property name="text">
+    <string>Invert Normal</string>
+   </property>
+   <property name="toolTip">
+    <string>Invert Normal</string>
+   </property>
+  </action>
+  <action name="actionShow_Whole">
+   <property name="text">
+    <string>Show Whole</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the whole mesh</string>
+   </property>
+  </action>
+  <action name="actionShow_Scalar">
+   <property name="icon">
+    <iconset resource="meshviewer.qrc">
+     <normaloff>:/MeshViewer/Resources/scalar.png</normaloff>:/MeshViewer/Resources/scalar.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Scalar</string>
+   </property>
+  </action>
+  <action name="actionShortest_Dist">
+   <property name="text">
+    <string>Shortest Distance</string>
+   </property>
+   <property name="toolTip">
+    <string>Shortest Distance from 1 vertex to all</string>
+   </property>
+  </action>
+  <action name="actionClear_selected">
+   <property name="text">
+    <string>clear selected</string>
+   </property>
+  </action>
+  <action name="actionInvert_selected">
+   <property name="text">
+    <string>invert selected</string>
+   </property>
+  </action>
+  <action name="actionSave_selected">
+   <property name="text">
+    <string>save selected</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>Viewer</class>
+   <extends>QWidget</extends>
+   <header>viewer.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="meshviewer.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sort_vector", "sort_vector\sort_vector.vcxproj", "{81189A9E-7C70-4BC4-8886-00FD3DAE8AB9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Polynomial", "STL-list(Sample)\Polynomial.vcxproj", "{F92B7E25-9AEC-85CB-BCAE-F336E288A8AC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81189A9E-7C70-4BC4-8886-00FD3DAE8AB9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{81189A9E-7C70-4BC4-8886-00FD3DAE8AB9}.Debug|Win32.Build.0 = Debug|Win32
+		{81189A9E-7C70-4BC4-8886-00FD3DAE8AB9}.Release|Win32.ActiveCfg = Release|Win32
+		{81189A9E-7C70-4BC4-8886-00FD3DAE8AB9}.Release|Win32.Build.0 = Release|Win32
+		{F92B7E25-9AEC-85CB-BCAE-F336E288A8AC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F92B7E25-9AEC-85CB-BCAE-F336E288A8AC}.Debug|Win32.Build.0 = Debug|Win32
+		{F92B7E25-9AEC-85CB-BCAE-F336E288A8AC}.Release|Win32.ActiveCfg = Release|Win32
+		{F92B7E25-9AEC-85CB-BCAE-F336E288A8AC}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

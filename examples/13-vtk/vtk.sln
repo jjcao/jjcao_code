@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "base", "base\base.vcxproj", "{A49995D2-4838-4C8C-859F-FF09176F7C8D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "contour_lines", "contour_lines\contour_lines.vcxproj", "{1B66E5E6-4C5D-420F-BB1A-000DAB386972}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A49995D2-4838-4C8C-859F-FF09176F7C8D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A49995D2-4838-4C8C-859F-FF09176F7C8D}.Debug|Win32.Build.0 = Debug|Win32
+		{A49995D2-4838-4C8C-859F-FF09176F7C8D}.Release|Win32.ActiveCfg = Release|Win32
+		{A49995D2-4838-4C8C-859F-FF09176F7C8D}.Release|Win32.Build.0 = Release|Win32
+		{1B66E5E6-4C5D-420F-BB1A-000DAB386972}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1B66E5E6-4C5D-420F-BB1A-000DAB386972}.Debug|Win32.Build.0 = Debug|Win32
+		{1B66E5E6-4C5D-420F-BB1A-000DAB386972}.Release|Win32.ActiveCfg = Release|Win32
+		{1B66E5E6-4C5D-420F-BB1A-000DAB386972}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

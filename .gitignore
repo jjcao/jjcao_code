@@ -1,6 +1,11 @@
 ipch/
 Debug/
 Release/
+GeneratedFiles/
+_UpgradeReport_Files/
+res/
+result/
+tools/
 *.sdf
 *.rar
 *.zip

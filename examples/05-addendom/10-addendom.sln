@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "marco", "marco\marco.vcxproj", "{75BBED13-C23E-4C45-BCC4-ADB78AEBF558}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "explicit", "explicit\explicit.vcxproj", "{6E44707F-0EFA-4E46-9BAB-6D5CC25D5B63}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75BBED13-C23E-4C45-BCC4-ADB78AEBF558}.Debug|Win32.ActiveCfg = Debug|Win32
+		{75BBED13-C23E-4C45-BCC4-ADB78AEBF558}.Debug|Win32.Build.0 = Debug|Win32
+		{75BBED13-C23E-4C45-BCC4-ADB78AEBF558}.Release|Win32.ActiveCfg = Release|Win32
+		{75BBED13-C23E-4C45-BCC4-ADB78AEBF558}.Release|Win32.Build.0 = Release|Win32
+		{6E44707F-0EFA-4E46-9BAB-6D5CC25D5B63}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6E44707F-0EFA-4E46-9BAB-6D5CC25D5B63}.Debug|Win32.Build.0 = Debug|Win32
+		{6E44707F-0EFA-4E46-9BAB-6D5CC25D5B63}.Release|Win32.ActiveCfg = Release|Win32
+		{6E44707F-0EFA-4E46-9BAB-6D5CC25D5B63}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
