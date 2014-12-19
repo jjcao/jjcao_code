@@ -8,6 +8,7 @@ result/
 tools/
 *.sdf
 *.rar
-*.zipbin/
+*.zip
+bin/
 lib/
 tools/
