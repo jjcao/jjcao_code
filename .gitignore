@@ -1,3 +1,13 @@
-bin/
+ipch/
+Debug/
+Release/
+GeneratedFiles/
+_UpgradeReport_Files/
+res/
+result/
+tools/
+*.sdf
+*.rar
+*.zipbin/
 lib/
 tools/

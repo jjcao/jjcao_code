@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "efficientArray", "efficientArray\efficientArray.vcxproj", "{F6B8ACA7-521D-41EB-A83D-0E4B2DA9005F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{91F3D2F0-A4DE-4B1B-AE07-59517D5C887D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F6B8ACA7-521D-41EB-A83D-0E4B2DA9005F} = {F6B8ACA7-521D-41EB-A83D-0E4B2DA9005F}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0CC30182-CB29-4A68-A506-4D40D7D806A6}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+		utest.vsmdi = utest.vsmdi
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NativeAssert", "NativeAssert\NativeAssert.vcxproj", "{7C47CE52-2E78-4617-B8BB-16A348A2F199}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = utest.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F6B8ACA7-521D-41EB-A83D-0E4B2DA9005F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F6B8ACA7-521D-41EB-A83D-0E4B2DA9005F}.Debug|Win32.Build.0 = Debug|Win32
+		{F6B8ACA7-521D-41EB-A83D-0E4B2DA9005F}.Release|Win32.ActiveCfg = Release|Win32
+		{F6B8ACA7-521D-41EB-A83D-0E4B2DA9005F}.Release|Win32.Build.0 = Release|Win32
+		{91F3D2F0-A4DE-4B1B-AE07-59517D5C887D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{91F3D2F0-A4DE-4B1B-AE07-59517D5C887D}.Debug|Win32.Build.0 = Debug|Win32
+		{91F3D2F0-A4DE-4B1B-AE07-59517D5C887D}.Release|Win32.ActiveCfg = Release|Win32
+		{91F3D2F0-A4DE-4B1B-AE07-59517D5C887D}.Release|Win32.Build.0 = Release|Win32
+		{7C47CE52-2E78-4617-B8BB-16A348A2F199}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7C47CE52-2E78-4617-B8BB-16A348A2F199}.Debug|Win32.Build.0 = Debug|Win32
+		{7C47CE52-2E78-4617-B8BB-16A348A2F199}.Release|Win32.ActiveCfg = Release|Win32
+		{7C47CE52-2E78-4617-B8BB-16A348A2F199}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,27 @@
+The following is an explanation of Constrained Object File Format (COF):
+
+a line begins with 'v' is a vertex with x,y,z coordinates as following
+a line begins with 'vt' is the parameter coordinates of vertex with the same index
+a line begins with 'f' is a face with three vertices (index)
+a line begins with 'cv' is a constrained vertex, the following number is the index, and then following two numbers are the parameter coordinates of the vertex
+
+for example:
+v -0.00829827 0.583053 0.070454                        //the first vertex,index is 0
+v 0.167032 0.573229 0.24299                            //the second vertex,index is 1  
+v 0.252233 0.601277 0.0250                             //the third vertex,index is 2
+v 0.339038 0.488498 0.353006                           //the fourth vertex,index is 3
+v 0.0827341 0.532133 0.445817                          //the fifth vertex,index is 4
+v -0.0880598 0.592028 0.241595705                      //the sixth vertex,index is 5
+vt 1.1 2.2                                             //the parameter coordinate of the first vertex
+vt 0.3 1.4                                             //the parameter coordinate of the second vertex
+vt 4.4 1.3                                             //the parameter coordinate of the third vertex
+vt 0.1 2.7                                             //the parameter coordinate of the fourth vertex
+vt 1.0 3.2                                             //the parameter coordinate of the fifth vertex
+vt 3.2 1.8                                             //the parameter coordinate of the sixth vertex
+f 2 1 0                                                //the face with vertices2,1,0
+f 4 1 3                                                //the face with vertices4,1,3
+f 4 0 1                                                //the face with vertices4,0,1
+f 4 5 0                                                //the face with vertices4,5,0
+f 4 2 5                                                //the face with vertices4,2,5
+cv 1 0.3 1.4                                           //the constrained vertex is the vertex 1, having u=,0.3 v=1.4
+cv 0                                                   //the constrained vertex is the vertex 0, having no u and v

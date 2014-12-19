@@ -1,0 +1,4 @@
+LIBRARY "vl_mser"
+
+EXPORTS
+mexFunction

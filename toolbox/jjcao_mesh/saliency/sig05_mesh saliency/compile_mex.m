@@ -1,0 +1,1 @@
+mex -I"../../../kdtree" compute_gaussian_weighted_curvature.cpp

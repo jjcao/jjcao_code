@@ -1,0 +1,31 @@
+function [hks] = HKS(evecs, evals, A, nstep, scale)
+
+% INPUTS
+%  evecs:  ith each column in this matrix is the ith eigenfunction of the Laplace-Beltrami operator
+%  evals:  ith element in this vector is the ith eigenvalue of the Laplace-Beltrami operator
+%  A:      ith element in this vector is the area associated with the ith vertex
+%  scale:  if scale = true, output the scaled hks
+%          o.w. ouput the hks that is not scaled
+
+% OUTPUTS
+%  hks: ith row in this matrix is the heat kernel signature of the ith vertex
+% 
+% changed by jjcao @ 2013
+                 
+if nargin < 4
+    nstep = 100;
+end
+if nargin < 5
+    scale = true;
+end
+tmin = abs(4*log(10) / evals(end));
+tmax = abs(4*log(10) / evals(2));
+
+stepsize = (log(tmax) - log(tmin)) / nstep;
+logts = log(tmin):stepsize:log(tmax);
+ts = exp(logts);
+
+hks = HKS_t(evecs, evals, A, ts, scale);
+
+
+

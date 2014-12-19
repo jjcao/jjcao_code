@@ -1,0 +1,2 @@
+LIBRARY merge.dll
+EXPORTS mexFunction

@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example_DGESV_rowmajor", "example_DGESV_rowmajor\example_DGESV_rowmajor.vcxproj", "{8A3F4F2C-E4F9-4CE2-A87F-36B04F4CC2D7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example_ZGESV_rowmajor", "example_ZGESV_rowmajor\example_ZGESV_rowmajor.vcxproj", "{516E669A-245A-4330-ACF1-B310C70244FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A3F4F2C-E4F9-4CE2-A87F-36B04F4CC2D7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8A3F4F2C-E4F9-4CE2-A87F-36B04F4CC2D7}.Debug|Win32.Build.0 = Debug|Win32
+		{8A3F4F2C-E4F9-4CE2-A87F-36B04F4CC2D7}.Release|Win32.ActiveCfg = Release|Win32
+		{8A3F4F2C-E4F9-4CE2-A87F-36B04F4CC2D7}.Release|Win32.Build.0 = Release|Win32
+		{516E669A-245A-4330-ACF1-B310C70244FB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{516E669A-245A-4330-ACF1-B310C70244FB}.Debug|Win32.Build.0 = Debug|Win32
+		{516E669A-245A-4330-ACF1-B310C70244FB}.Release|Win32.ActiveCfg = Release|Win32
+		{516E669A-245A-4330-ACF1-B310C70244FB}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,7 @@
+; mShow.def : Declares the module parameters for the DLL.
+
+LIBRARY      "mShow"
+
+EXPORTS
+    ; Explicit exports can go here
+    mexFunction

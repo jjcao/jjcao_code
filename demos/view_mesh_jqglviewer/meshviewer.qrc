@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="MeshViewer">
+    <file>Resources/scalar.png</file>
+    <file>Resources/invertFace.png</file>
+    <file>Resources/invertNormal.png</file>
+  </qresource>
+</RCC>

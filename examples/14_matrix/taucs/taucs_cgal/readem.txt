@@ -1,0 +1,3 @@
+Only release is OK.
+
+C/C++ /Code Generation /Runtime Library: MD

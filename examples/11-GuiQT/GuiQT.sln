@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XScribble1", "XScribble1\XScribble1.vcxproj", "{A338FF86-9009-49CB-B1AA-7945A49B0A52}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XScribble2", "XScribble2\XScribble2.vcxproj", "{8C1BB2E0-C9DB-4EF2-BEDE-44C21A24C950}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hello", "hello\hello.vcxproj", "{90E74934-6D0D-4D12-A59E-4E68344A77EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A338FF86-9009-49CB-B1AA-7945A49B0A52}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A338FF86-9009-49CB-B1AA-7945A49B0A52}.Debug|Win32.Build.0 = Debug|Win32
+		{A338FF86-9009-49CB-B1AA-7945A49B0A52}.Release|Win32.ActiveCfg = Release|Win32
+		{A338FF86-9009-49CB-B1AA-7945A49B0A52}.Release|Win32.Build.0 = Release|Win32
+		{8C1BB2E0-C9DB-4EF2-BEDE-44C21A24C950}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8C1BB2E0-C9DB-4EF2-BEDE-44C21A24C950}.Debug|Win32.Build.0 = Debug|Win32
+		{8C1BB2E0-C9DB-4EF2-BEDE-44C21A24C950}.Release|Win32.ActiveCfg = Release|Win32
+		{8C1BB2E0-C9DB-4EF2-BEDE-44C21A24C950}.Release|Win32.Build.0 = Release|Win32
+		{90E74934-6D0D-4D12-A59E-4E68344A77EF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{90E74934-6D0D-4D12-A59E-4E68344A77EF}.Debug|Win32.Build.0 = Debug|Win32
+		{90E74934-6D0D-4D12-A59E-4E68344A77EF}.Release|Win32.ActiveCfg = Release|Win32
+		{90E74934-6D0D-4D12-A59E-4E68344A77EF}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
