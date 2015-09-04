@@ -11,9 +11,9 @@ addpath(genpath('../../'));
 
 DEBUG = 1;
 %% input
-M.npatch = 40;
+M.npatch = 200;
 USE_CONCAVE_WEIGHT=0;
-M.filename = '/data/wolf2.off'; %cube_f300, cube_f1200,fandisk,wolf0
+M.filename = '/data/fandisk.off'; %cube_f300, cube_f1200,fandisk,wolf0
 [M.verts,M.faces] = read_mesh(M.filename);
 % [M.verts,M.faces] = read_mesh();
 [normal M.fnormal] = compute_normal(M.verts,M.faces);

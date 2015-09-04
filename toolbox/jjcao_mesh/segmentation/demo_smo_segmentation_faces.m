@@ -1,31 +1,26 @@
 % Copyright (c) 2012 Junjie Cao
 
 clear;clc;close all;
-%MYTOOLBOXROOT='E:/jjcaolib/toolbox';
+%MYTOOLBOXROOT='C:\jjcao_code\toolbox';
 MYTOOLBOXROOT='../..';
-addpath ([MYTOOLBOXROOT '/jjcao_mesh'])
-addpath ([MYTOOLBOXROOT '/jjcao_io'])
-addpath ([MYTOOLBOXROOT '/jjcao_plot'])
-addpath ([MYTOOLBOXROOT '/jjcao_interact'])
-addpath ([MYTOOLBOXROOT '/jjcao_common'])
-addpath ([MYTOOLBOXROOT '/jjcao_mesh/supervertex'])
-addpath ('div_rank')
+addpath(genpath(MYTOOLBOXROOT));
 
 %% input
 DEBUG=1;
 
-M.filename = [MYTOOLBOXROOT '/data/cube_f300.off']; %cube_f1200,
+M.filename = [MYTOOLBOXROOT '/data/cube_f300.off']; %cube_f300, cube_f1200, ,85_v1814 (several minutes for this file)
 [M.verts,M.faces] = read_mesh(M.filename);
 nface = size(M.faces,1);
 [normal M.fnormal] = compute_normal(M.verts,M.faces);
 M.fnormal = M.fnormal';
 
 if DEBUG
-    figure('Name','Input'); set(gcf,'color','white'); 
-    h = plot_mesh(M.verts, M.faces);    view3d rot;   hold on;
-    verts = M.verts(M.faces(1,:),:);   
-    h=scatter3(verts(:,1),verts(:,2),verts(:,3),40,'b','filled');
-    delete(h);
+    figure('Name','Input'); set(gcf,'color','white');
+    h=trisurf(M.faces,M.verts(:,1),M.verts(:,2),M.verts(:,3), ...
+    'FaceColor', 'cyan',  'edgecolor',[1,0,0], 'faceAlpha', 0.6); axis off; axis equal; mouse3d;hold on;
+%     verts = M.verts(M.faces(1,:),:);   
+%     h=scatter3(verts(:,1),verts(:,2),verts(:,3),40,'b','filled');
+%     delete(h);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -79,21 +74,24 @@ cluster_info'
 
 %% show result
 figure('Name','Segment by SMO'); set(gcf,'color','white');
-options.face_vertex_color = M.face_segments;
-h = plot_mesh(M.verts, M.faces, options);
-colormap(jet(M.nsegments));view3d rot;
+h=trisurf(M.faces,M.verts(:,1),M.verts(:,2),M.verts(:,3), ...
+    'FaceVertexCData',M.face_segments, 'edgecolor','none', 'faceAlpha', 0.8); axis off; axis equal; mouse3d;hold on;
+colormap(jet(M.nsegments));
 lighting none;
 
 %% save result
 [pathstr, name, ext] = fileparts(M.filename);
-save(sprintf('%s_seg_%d_som.mat', ['result/' name], M.nsegments), 'M');
+save(sprintf('%s_seg_%d_som.mat', ['../../result/' name], M.nsegments), 'M');
 %% show process
-% figure('Name','Segment process by SMO'); set(gcf,'color','white');
-% for j=1:M.nsegments,      
-%     tmp = zeros(size(M.face_segments));
-%     tmp(M.face_segments==j)=j;
-%     options.face_vertex_color = tmp;
-%     h = plot_mesh(M.verts, M.faces, options);view3d rot;lighting none;colormap(jet(M.nsegments));
-%     pause;
-%     delete(h);
+% if DEBUG
+%     figure('Name','Segment process by SMO'); set(gcf,'color','white');
+%     for j=1:M.nsegments,      
+%         tmp = zeros(size(M.face_segments));
+%         tmp(M.face_segments==j)=j;
+%         h=trisurf(M.faces,M.verts(:,1),M.verts(:,2),M.verts(:,3), ...
+%              'FaceVertexCData',tmp, 'edgecolor','none', 'faceAlpha', 0.8); axis off; axis equal; mouse3d;hold on;
+%         lighting none;colormap(jet(M.nsegments));
+%         pause;
+%         delete(h);
+%     end
 % end

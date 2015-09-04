@@ -1,17 +1,11 @@
 clear;clc;close all;
-%MYTOOLBOXROOT='E:/jjcaolib/toolbox';
+%MYTOOLBOXROOT='C:\jjcao_code\toolbox';
 MYTOOLBOXROOT='../..';
-addpath ([MYTOOLBOXROOT '/jjcao_mesh'])
-addpath ([MYTOOLBOXROOT '/jjcao_io'])
-addpath ([MYTOOLBOXROOT '/jjcao_plot'])
-addpath ([MYTOOLBOXROOT '/jjcao_interact'])
-addpath ([MYTOOLBOXROOT '/jjcao_common'])
-addpath ('div_rank')
+addpath(genpath(MYTOOLBOXROOT));
 
-DEBUG=0;
-USEFILE=1;
+DEBUG=1;
 %% input
-filename = 'fandisk_p100.mat';% cube_f1200_p96, fandisk_p100,wolf0_p200
+filename = 'fandisk_p200.mat';% cube_f1200_p96, fandisk_p100,wolf0_p200
 load(filename);
 nface = size(M.faces,1);
 %%
@@ -29,7 +23,7 @@ end
 %% setting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 M.nbins = 10; % for feature histgram
-M.nsegments = 10; % fandisk_p100 (15=>16)
+M.nsegments = 14; % fandisk_p100 (15=>16)
 M.USE_CONCAVE_WEIGHT = 0;
 M.constZ = 0.01;% The contant for ground conductance0.01
 M.thresDist = 0.1; % let adjaceny matrix more sparse
@@ -41,7 +35,7 @@ M.thresMerge = 0.1; % merge segments by reducing number of nsegments, thresMerge
 M.LIN_MODE = 0 ;
 
 %% compute adjacency matrix by inner product of patch features
-if ~USEFILE
+if ~isfield(M,'patch_adjancy')
     [M.patch_adjancy,M.patch_centers,M.patch_verts,M.patch_faces, ...
         M.verts_between_patch] = compute_face_patch_graph(M.faces,M.face_patch,M.verts,M.npatch); % adjacency matrix A, A(i,i)=0
     if DEBUG
@@ -49,7 +43,7 @@ if ~USEFILE
         h = plot_graph(M.patch_adjancy,M.patch_centers);axis equal;view3d rot;
     end 
     M.patch_normal = compute_patch_angle(M.fnormal,M.patch_faces);
-%     M.patch_curvature_hist = compute_patch_curvature_hist(M.verts,M.faces, M.patch_verts, M.nbins);
+    M.patch_curvature_hist = compute_patch_curvature_hist(M.verts,M.faces, M.patch_verts, M.nbins);
     save(filename, 'M');
 end
 %%
@@ -133,7 +127,7 @@ lighting none;
 %%
 figure('Name','Segment by SMO'); movegui('southeast');set(gcf,'color','white');
 % tmp = (M.nsegments:-1:1)';
-tmp = circshift(1:M.nsegments,2)';
+tmp = circshift(1:M.nsegments, [2,0])';
 options.face_vertex_color = tmp(M.face_segments);
 h = plot_mesh(M.verts, M.faces, options);
 % colormap(jet(M.nsegments));view3d rot;
@@ -142,4 +136,4 @@ lighting none;
 
 %% save result
 [pathstr, name, ext] = fileparts(filename);
-save(sprintf('%s_seg%d_som_%f.mat', ['result/' name], M.nsegments,M.constZ), 'M');
+save(sprintf('%s_seg%d_som_%f.mat', ['../../result/' name], M.nsegments,M.constZ), 'M');

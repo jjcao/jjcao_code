@@ -9,7 +9,7 @@ function [normal,normalf] = compute_normal(vertex,face, bEnforceOutward)
 %
 %   changed by jjcao 2014
 %   Copyright (c) 2004 Gabriel Peyr?
-if nargin < 2
+if nargin < 3
     bEnforceOutward = 1;
 end
 [vertex,face] = check_face_vertex(vertex,face);

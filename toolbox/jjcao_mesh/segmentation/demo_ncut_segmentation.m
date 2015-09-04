@@ -1,17 +1,11 @@
 clear;clc;close all;
-%MYTOOLBOXROOT='E:/jjcaolib/toolbox';
+%MYTOOLBOXROOT='C:\jjcao_code\toolbox';
 MYTOOLBOXROOT='../..';
-addpath ([MYTOOLBOXROOT '/jjcao_mesh'])
-addpath ([MYTOOLBOXROOT '/jjcao_io'])
-addpath ([MYTOOLBOXROOT '/jjcao_plot'])
-addpath ([MYTOOLBOXROOT '/jjcao_interact'])
-addpath ([MYTOOLBOXROOT '/jjcao_common'])
-addpath ([MYTOOLBOXROOT '/Ncut_9'])
+addpath(genpath(MYTOOLBOXROOT));
 
 DEBUG=1;
-USEFILE=1;
 %% input
-filename = 'fandisk_p100.mat';% cube_f1200_p96, fandisk_p100,wolf0_p200
+filename = 'fandisk_p200.mat';% cube_f1200_p96, fandisk_p100,wolf0_p200
 load(filename);
 nface = size(M.faces,1);
 if DEBUG
@@ -32,7 +26,7 @@ M.USE_CONCAVE_WEIGHT = 0;
 M.thresDist = 0.1; % let adjaceny matrix more sparse
 
 %% compute adjacency matrix by inner product of patch features
-if ~USEFILE
+if ~isfield(M,'patch_adjancy')
     [M.patch_adjancy,M.patch_centers,M.patch_verts,M.patch_faces, ...
         M.verts_between_patch] = compute_face_patch_graph(M.faces,M.face_patch,M.verts,M.npatch); % adjacency matrix A, A(i,i)=0
     if DEBUG
@@ -44,7 +38,11 @@ if ~USEFILE
     save(filename, 'M');
 end
 
-A=compute_random_walk_graph(M.patch_adjancy,M.patch_normal,M.patch_curvature_hist,M.verts_between_patch,M.USE_CONCAVE_WEIGHT,M.verts,M.faces);
+options.USE_CONCAVE_WEIGHT = M.USE_CONCAVE_WEIGHT;
+options.verts = M.verts;
+options.faces = M.faces;
+A=compute_random_walk_graph(M.patch_adjancy,M.patch_normal,M.patch_curvature_hist,M.verts_between_patch,options);
+
 % Distances less than ThresDist are set to 0. 
 if DEBUG
     ind = find(A); tmp = full(A(ind));
@@ -85,4 +83,4 @@ lighting none;
 
 %% save result
 [pathstr, name, ext] = fileparts(filename);
-save(sprintf('%s_seg%d_ncut.mat', ['result/' name], M.nsegments), 'M');
+save(sprintf('%s_seg%d_ncut.mat', ['../../result/' name], M.nsegments), 'M');

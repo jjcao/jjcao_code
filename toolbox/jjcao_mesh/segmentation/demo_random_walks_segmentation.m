@@ -2,20 +2,15 @@
 % seeds are selected by demo_smo_segmentation
 
 clear;clc;close all;
-%MYTOOLBOXROOT='E:/jjcaolib/toolbox';
+%MYTOOLBOXROOT='C:\jjcao_code\toolbox';
 MYTOOLBOXROOT='../..';
-addpath ([MYTOOLBOXROOT '/jjcao_mesh'])
-addpath ([MYTOOLBOXROOT '/jjcao_io'])
-addpath ([MYTOOLBOXROOT '/jjcao_plot'])
-addpath ([MYTOOLBOXROOT '/jjcao_interact'])
-addpath ([MYTOOLBOXROOT '/jjcao_common'])
-addpath ('div_rank')
+addpath(genpath(MYTOOLBOXROOT));
 
 DEBUG=1;
 
 %% input
 
-filename = 'result\fandisk_p100_seg14_som_0.010000.mat';% cube_f1200_p96, fandisk_p100,wolf0_p200
+filename = 'result\wolf2_p199_seg11_som_0.010000.mat';% cube_f1200_p96, fandisk_p100,wolf0_p200
 load(filename);
 nface = size(M.faces,1);
 %%
@@ -43,7 +38,7 @@ M.thresDist = 0.1; % let adjaceny matrix more sparse
 options.USE_CONCAVE_WEIGHT = M.USE_CONCAVE_WEIGHT;
 options.verts = M.verts;
 options.faces = M.faces;
-options.seed_id = M.rank_set(1:M.nsegments);
+options.seed_id = M.rank_set(1:min(length(M.rank_set),M.nsegments));
 [A B] =compute_random_walk_graph(M.patch_adjancy,M.patch_normal,M.patch_curvature_hist,M.verts_between_patch,options);
 % Distances less than ThresDist are set to 0. 
 % if DEBUG
@@ -83,4 +78,4 @@ lighting none;
 
 %% save result
 [pathstr, name, ext] = fileparts(filename);
-save(sprintf('%s_seg%d_random_walks.mat', ['result/' name], M.nsegments), 'M');
+save(sprintf('%s_seg%d_random_walks.mat', ['../../result/' name], M.nsegments), 'M');
