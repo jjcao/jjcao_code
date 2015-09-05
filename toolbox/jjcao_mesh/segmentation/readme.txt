@@ -1,6 +1,6 @@
 1. Mesh => oversegmented patches => segmentation
-.../supervertex/demo_supervertex_ncut.m : segment mesh into patches
-2.demo_smo_segmentation.m : patches to segmentation via smo
+   1) supervertex/test_compute_supervertex_ncut.m : segment mesh into patches
+   2) demo_smo_segmentation.m : patches to segmentation via smo
 
 3.demo_ncut_segmentation.m : patches to segmentation via ncut
 
