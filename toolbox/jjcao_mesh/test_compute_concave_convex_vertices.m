@@ -4,14 +4,14 @@
 
 clear;clc;close all;
 %MYTOOLBOXROOT='E:/jjcaolib/toolbox/';
-MYTOOLBOXROOT='../';
+MYTOOLBOXROOT='../../';
 addpath ([MYTOOLBOXROOT 'jjcao_common'])
 addpath ([MYTOOLBOXROOT 'jjcao_interact'])
 addpath ([MYTOOLBOXROOT 'jjcao_io'])
 addpath ([MYTOOLBOXROOT 'jjcao_plot'])
 
 %% load a mesh
-test_file = {[MYTOOLBOXROOT 'data/cube_602.off'],[MYTOOLBOXROOT 'data/fandisk.off'],[MYTOOLBOXROOT 'data/100.off']};
+test_file = {[MYTOOLBOXROOT 'data/cube_f300.off'],[MYTOOLBOXROOT 'data/fandisk.off'],[MYTOOLBOXROOT 'data/100.off']};
 filename = test_file{2};
 [verts,faces] = read_mesh(filename);
 %%
