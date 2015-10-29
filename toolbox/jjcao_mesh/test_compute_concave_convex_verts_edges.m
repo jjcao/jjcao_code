@@ -1,4 +1,4 @@
-% compute_concave_convex_vertices
+% test_compute_concave_convex_verts_edges
 %
 % Copyright (c) 2012 JJCAO
 
