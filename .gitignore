@@ -12,3 +12,5 @@ tools/
 bin/
 lib/
 tools/
+
+*.obj
