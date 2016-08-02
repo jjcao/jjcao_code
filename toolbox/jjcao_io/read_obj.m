@@ -43,7 +43,11 @@ while 1
     if ~ischar(s), 
         break;
     end
-    if ~isempty(s) && strcmp(s(1), 'f')% face
+    if isempty(s) 
+        continue;
+    end
+    
+    if strcmp(s(1), 'f')% face
         idx = strfind(s, '/');
         if isempty(idx)
             faces(end+1,:) = sscanf(s(3:end), '%d %d %d');
@@ -52,12 +56,14 @@ while 1
             tmp = sscanf(s(3:end), '%d %d %d %d %d %d');
             faces(end+1,:) = tmp(1:length(tmp)/3:end);
         end
-    elseif ~isempty(s) && strcmp(s(1:2), 'v ') % vertex
-        vertex(end+1,:) = sscanf(s(3:end), '%f %f %f');
-    elseif ~isempty(s) && strcmp(s(1:2), 'vn') % vertex normal
-        normals(end+1,:) = sscanf(s(3:end), '%f %f %f');
-    elseif ~isempty(s) && strcmp(s(1:2), 'vt') % texture uv
-        uv(end+1,:) = sscanf(s(3:end), '%f %f');        
+    elseif length(s) >1
+        if strcmp(s(1:2), 'v ') % vertex
+            vertex(end+1,:) = sscanf(s(3:end), '%f %f %f');
+        elseif strcmp(s(1:2), 'vn') % vertex normal
+            normals(end+1,:) = sscanf(s(3:end), '%f %f %f');
+        elseif strcmp(s(1:2), 'vt') % texture uv
+            uv(end+1,:) = sscanf(s(3:end), '%f %f');        
+        end
     end
 end
 fclose(fid);
