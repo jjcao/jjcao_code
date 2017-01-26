@@ -89,7 +89,8 @@ void myinit()
 {
   /* setup gl view here */
   glClearColor(0.0, 0.0, 0.0, 0.0);
-  glShadeModel(GL_SMOOTH);
+  glEnable(GL_DEPTH_TEST);            // enable depth buffering
+  glShadeModel(GL_SMOOTH);            // interpolate colors during rasterization
   
 }
 
@@ -127,6 +128,7 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Reset transformations
 	glLoadIdentity();
+
 	gluLookAt(0.0, 0.0, 125.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 	glTranslatef(g_vLandTranslate[0], g_vLandTranslate[1], g_vLandTranslate[2]);
 	glRotatef(g_vLandRotate[0], 1.0f, 0.0f, 0.0f);
@@ -157,6 +159,7 @@ void display()
 	CImg<float> z0, z1;
 	float x, y0, y1;
 	int step(1);
+	float hScale(25.0f);
 	//glFrontFace(GL_CW);
   for (int i = 0; i < heightData.height() - step; i = i+step) {
 	  y0 = i - hh;
@@ -164,16 +167,16 @@ void display()
 	  glBegin(GL_TRIANGLE_STRIP);
 	  for (int j = 0; j < heightData.width(); j = j + step) {
 		  x = j - hw;
-		  z0 = heightData.get_vector_at(j, i) / 25.0; // 'top' vertex
-		  z1 = heightData.get_vector_at(j, i+step) / 25.0;// 'bottom' vertex
+		  z0 = heightData.get_vector_at(j, i)/255.0 ; // 'top' vertex
+		  z1 = heightData.get_vector_at(j, i+step) / 255.0;// 'bottom' vertex
 
 		  // sequential top,bottom vert pairs generates a tri-strip
 		  //glColor3f(z0(0), z0(1), z0(2));
 		  glColor3f(0.0f, 0.0f, z0(0));
-		  glVertex3f(x, y0, z0(0));
+		  glVertex3f(x, y0, z0(0)* hScale);
 		  //glVertex3f(x, y0, 1.0);
 		  glColor3f(0.0f, 0.0f, z1(0));
-		  glVertex3f(x, y1, z1(0));
+		  glVertex3f(x, y1, z1(0)* hScale);
 		  //glVertex3f(x, y1, 1.0);
 		}// next pixel in current row
 	  glEnd();
@@ -230,20 +233,20 @@ void mousedrag(int x, int y)
     case TRANSLATE:  
       if (g_iLeftMouseButton)
       {
-        g_vLandTranslate[0] += vMouseDelta[0]*0.01;
-        g_vLandTranslate[1] += vMouseDelta[1]*0.01;
+        g_vLandTranslate[0] += vMouseDelta[0]*0.1;
+        g_vLandTranslate[1] += vMouseDelta[1]*0.1;
       }
       if (g_iMiddleMouseButton)
       {
-        g_vLandTranslate[2] += vMouseDelta[1]*0.01;
+        g_vLandTranslate[2] += vMouseDelta[1]*0.1;
       }
 	  
       break;
     case ROTATE:
       if (g_iLeftMouseButton)
       {
-        g_vLandRotate[0] += vMouseDelta[0];
-        g_vLandRotate[1] += vMouseDelta[1];
+        g_vLandRotate[0] += vMouseDelta[1];
+        g_vLandRotate[1] += vMouseDelta[0];
       }
       if (g_iMiddleMouseButton)
       {
