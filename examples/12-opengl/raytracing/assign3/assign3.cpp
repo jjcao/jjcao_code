@@ -13,12 +13,14 @@ using namespace cimg_library;
 #include <stdlib.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+#include <vector>
+#include "Utils.h"
 
 #define MAX_TRIANGLES 2000
 #define MAX_SPHERES 10
 #define MAX_LIGHTS 10
 
-char *filename=0;
+char *filename="screen.jpg";
 
 //different display modes
 #define MODE_DISPLAY 1
@@ -26,22 +28,23 @@ char *filename=0;
 int mode=MODE_DISPLAY;
 
 //you may want to make these smaller for debugging purposes
-#define WIDTH 640
-#define HEIGHT 480
-
+float WIDTH(320*2);//640
+float HEIGHT(240*2);//480
+float ar = WIDTH / HEIGHT; // aspect ratio
 //the field of view of the camera
-#define fov 60.0
+//#define fov 60.0
+#define fov 1.05 // 60 degreen in radians
 
 //unsigned char buffer[HEIGHT][WIDTH][3];
 CImg<unsigned char> buffer(WIDTH, HEIGHT, 1, 3);
 
 struct Vertex
 {
-  double position[3];
-  double color_diffuse[3];
-  double color_specular[3];
-  double normal[3];
-  double shininess;
+  float position[3];
+  float color_diffuse[3];
+  float color_specular[3];
+  float normal[3];
+  float shininess;
 };
 
 typedef struct _Triangle
@@ -51,23 +54,33 @@ typedef struct _Triangle
 
 typedef struct _Sphere
 {
-  double position[3];
-  double color_diffuse[3];
-  double color_specular[3];
-  double shininess;
-  double radius;
+  float position[3];
+  float color_diffuse[3];
+  float color_specular[3];
+  float shininess;
+  float radius;
 } Sphere;
 
 typedef struct _Light
 {
-  double position[3];
-  double color[3];
+  float position[3];
+  float color[3];
 } Light;
 
+enum ObjType { NONE, SPHERE, TRIANGLE};
 Triangle triangles[MAX_TRIANGLES];
 Sphere spheres[MAX_SPHERES];
 Light lights[MAX_LIGHTS];
-double ambient_light[3];
+float ambient_light[3];
+//Material coefficients for each color:
+float ka = 0.1;
+float kd = 0.6;
+float ks = 0.3;
+// attenuation constant: 1/(a+bq+cq^2), q is the distance
+float aa(1.0);
+float ab(0.0);
+float ac(1.0);
+
 
 int num_triangles=0;
 int num_spheres=0;
@@ -83,6 +96,188 @@ void plot_pixel_display(int x,int y,unsigned char r,unsigned char g,unsigned cha
 void plot_pixel_jpeg(int x,int y,unsigned char r,unsigned char g,unsigned char b);
 void plot_pixel(int x,int y,unsigned char r,unsigned char g,unsigned char b);
 
+// does the ray hit the sphere?
+// ray: p(t) = origin + dt;
+// d is the normalized direction;
+// t returns t for the nearest intersection point to origin
+// t == -1 if it does not hit anything
+float hit_ray(Vector& origin, Vector& d, Sphere& sphere)
+{
+	float t(-1.0);
+
+	Vector p0(origin);
+	Vector ce(sphere.position);// center
+	float r = sphere.radius;
+	Vector tmpv = p0 - ce;
+	float b = 2 * d.Dot(tmpv);
+	float c = tmpv.Dot(tmpv) - r * r;
+	float tmpf = b*b - 4 * c;
+
+	if (tmpf < 0) return t;
+
+	tmpf = std::sqrt(tmpf);
+	float t0 = 0.5*(-b + tmpf);
+	float t1 = 0.5*(-b - tmpf);
+
+	t = std::numeric_limits<float>::max();
+	if (t0 > 0 && t0 < t) t = t0;
+	if (t1 > 0 && t1 < t) t = t1;
+
+	if (t > 0.9*std::numeric_limits<float>::max()) t = -1;
+	return t;
+}
+// does the line from origin to target intersect any object?
+// ray: p(t) = origin + dt;
+// d is the normalized direction determined by: target - origin;
+// t returns t for the nearest intersection point to origin
+// if distance(origin, target) < distance(origin, p(t)), return -1;
+// return t and object (type & id) of the hitted object
+// t == -1 if it does not hit anything
+// if bnearst == true, return the object (type & id) of the nearest hitted object also.
+float intersect_line(Vector& origin, Vector& target, int & objid, ObjType& objtype, bool bnearst=false)
+{
+	float t(-1.0);	
+	Vector d(target.x - origin.x, target.y - origin.y, target.z - origin.z);
+	float distThre = d.Magnitude();
+	if (distThre < 20 * std::numeric_limits<float>::epsilon()) return t;
+	d.Normalize(); // direction
+
+	float mint = std::numeric_limits<float>::max();
+	for (int i = 0; i < num_spheres; ++i)
+	{
+		t = hit_ray(origin, d, spheres[i]);
+		if (t < 0 || t > distThre) continue;
+		if (t > mint) continue;
+
+		mint = t;
+		objid = i;
+		objtype = SPHERE;
+		t = mint;
+
+		if (!bnearst) break;
+	}
+
+	// todo triangles
+
+	return t;
+}
+
+std::vector<float> trace_pixel(unsigned int x, unsigned int y)
+{
+	std::vector<float> color(3, 0.0f);
+
+	// level0: scale
+	float fy = 2.0f * tan(fov*0.5) * y / HEIGHT; // assume that near plane: z = -1
+	float fx = 2.0f * tan(fov*0.5) * ar * x / WIDTH;
+	fy = fy - tan(fov*0.5); // assume that near plane: z = -1
+	fx = fx - ar * tan(fov*0.5);
+	
+	// level1: sent out rays
+	Vector origin(0,0,0); // origin
+	Vector dirPrim(fx - origin.x, fy - origin.y, -1 - origin.z);
+	dirPrim.Normalize(); // direction of the primary ray
+
+	float mint = std::numeric_limits<float>::max();
+	for (int i = 0; i < num_spheres; ++i)
+	{
+		// level2: intersection
+		float t = hit_ray(origin, dirPrim, spheres[i]);
+		if (t< 0 || t > mint) continue;
+		mint = t;		
+
+		//color[0] = 255.0; 
+		Vector ip = origin + dirPrim*mint; //intersection point		
+
+		// level3: shadow rays
+		int objid(-1);
+		ObjType objtype(NONE);
+		Vector illu(0.0, 0.0, 0.0); // accumulate illumination
+		for (int j = 0; j < num_lights; ++j)
+		{
+			Vector target(lights[j].position);
+
+			float t = intersect_line(ip, target, objid, objtype);
+			if (t < 0 || (objtype==SPHERE && objid == i))
+			{
+				// todo compute its shading by local phone model				
+				Vector L(lights[j].color);
+				Vector sc(spheres[i].position);// center
+				Vector n = (ip - sc).Normalize();
+				Vector dirLight = (target - ip).Normalize(); // actually the negative direction of lighting
+				Vector v = dirPrim*(-1); // unit vector to camera
+				Vector r = n*dirLight.Dot(n)*2-dirLight;// unit reflected vector;
+				float tmpd = std::max<float>(0.0f, n.Dot(dirLight));
+				float tmps = std::max<float>(0.0f, r.Dot(v));
+				Vector I = L*kd*tmpd+ L*ks*tmps;
+				float dist = (target - ip).Magnitude(); ;
+				illu = illu + I / (aa + ab*t+ac*dist * dist);
+			}
+			// else the pixel is blocked, i.e. no light hit the pixel
+		}
+		
+		Vector La(ambient_light);
+		illu = illu + La*ka;
+		if (illu.x > 1.0) illu.x = 1.0;
+		if (illu.y > 1.0) illu.y = 1.0;
+		if (illu.z > 1.0) illu.z = 1.0;
+
+		color[0] = 255.0*illu.x;
+		color[1] = 255.0*illu.y;
+		color[2] = 255.0*illu.z;
+		// level4: nonzero specular component todo
+	}
+
+	for (int i = 0; i < num_triangles; ++i)
+	{
+		// level2: intersection
+		Vector p(origin);
+		Vector p0(triangles[i].v[0].position);
+		Vector p1(triangles[i].v[1].position);
+		Vector p2(triangles[i].v[2].position);
+
+		CImg<float> A(3, 3, 1, 1); CImg<float> b(1, 3, 1, 1);
+		Vector tmpv(dirPrim*(-1.0));
+		//tmpv = origin;
+		int j = 0;
+		A(j, 0) = tmpv.x; A(j, 1) = tmpv.y; A(j, 2) = tmpv.z;
+		
+		tmpv = p1 - p0; 
+		//tmpv = origin;
+		j = 1;
+		A(j, 0) = tmpv.x; A(j, 1) = tmpv.y; A(j, 2) = tmpv.z;
+		
+		tmpv = p2 - p0;
+		//tmpv = origin;
+		j = 2;
+		A(j, 0) = tmpv.x; A(j, 1) = tmpv.y; A(j, 2) = tmpv.z;
+		//A(0, 0) = 1; A(1, 1) = 1; A(2, 2) = 1;
+
+
+		tmpv = p - p0;
+		j = 0;
+		b(j,0) = tmpv.x; b(j, 1) = tmpv.y; b(j, 2) = tmpv.z;
+
+
+		CImg<float> sol = b.solve(A);
+		float t = sol(j, 0);
+		float u = sol(j, 1);
+		float v = sol(j, 2);
+
+		if (t < 0 || t > mint) continue;
+		if (u < 0 || v < 0) continue;
+		if (u + v > 1) continue;
+
+		mint = t;
+		//color[0] = 255.0; //color[1] = 1.0; color[2] = 1.0;
+		Vector ip = p + dirPrim*mint; //intersection point	
+
+		// level3: shadow rays todo
+		// level4: nonzero specular component todo
+	}
+	//color[0] = 255.0;
+	return color;
+}
+
 //MODIFY THIS FUNCTION
 void draw_scene()
 {
@@ -94,7 +289,9 @@ void draw_scene()
     glBegin(GL_POINTS);
     for(y=0;y < HEIGHT;y++)
     {
-      plot_pixel(x,y,x%256,y%256,(x+y)%256);
+		//plot_pixel(x,y,x%256,y%256,(x+y)%256);
+		std::vector<float> color = trace_pixel(x, y);      
+		plot_pixel(x, y, color[0], color[1], color[2]);
     }
     glEnd();
     glFlush();
@@ -104,7 +301,7 @@ void draw_scene()
 
 void plot_pixel_display(int x,int y,unsigned char r,unsigned char g,unsigned char b)
 {
-  glColor3f(((double)r)/256.f,((double)g)/256.f,((double)b)/256.f);
+  glColor3f(((float)r)/256.f,((float)g)/256.f,((float)b)/256.f);
   glVertex2i(x,y);
 }
 
@@ -121,7 +318,7 @@ void plot_pixel_jpeg(int x, int y, unsigned char r, unsigned char g, unsigned ch
 void plot_pixel(int x,int y,unsigned char r,unsigned char g, unsigned char b)
 {
   plot_pixel_display(x,y,r,g,b);
-  if(mode == MODE_JPEG)
+  //if(mode == MODE_JPEG)
       plot_pixel_jpeg(x,y,r,g,b);
 }
 
@@ -138,30 +335,30 @@ void parse_check(char *expected,char *found)
 
 }
 
-void parse_doubles(FILE*file, char *check, double p[3])
+void parse_floats(FILE*file, char *check, float p[3])
 {
   char str[100];
   fscanf_s(file,"%s",str,100);
   parse_check(check,str);
-  fscanf_s(file,"%lf %lf %lf",&p[0],&p[1],&p[2]);
-  printf("%s %lf %lf %lf\n",check,p[0],p[1],p[2]);
+  fscanf_s(file,"%f %f %f",&p[0],&p[1],&p[2]);
+  printf("%s %f %f %f\n",check,p[0],p[1],p[2]);
 }
 
-void parse_rad(FILE*file,double *r)
+void parse_rad(FILE*file,float *r)
 {
   char str[100];
   fscanf_s(file,"%s",str, 100);
   parse_check("rad:",str);
-  fscanf_s(file,"%lf",r);
+  fscanf_s(file,"%f",r);
   printf("rad: %f\n",*r);
 }
 
-void parse_shi(FILE*file,double *shi)
+void parse_shi(FILE*file,float *shi)
 {
   char s[100];
   fscanf_s(file,"%s",s, 100);
   parse_check("shi:",s);
-  fscanf_s(file,"%lf",shi);
+  fscanf_s(file,"%f",shi);
   printf("shi: %f\n",*shi);
 }
 
@@ -179,7 +376,7 @@ int loadScene(char *argv)
 
   printf("number of objects: %i\n",number_of_objects);
 
-  parse_doubles(file,"amb:",ambient_light);
+  parse_floats(file,"amb:",ambient_light);
 
   for(i=0;i < number_of_objects;i++)
     {
@@ -193,10 +390,10 @@ int loadScene(char *argv)
 
 	  for(j=0;j < 3;j++)
 	    {
-	      parse_doubles(file,"pos:",t.v[j].position);
-	      parse_doubles(file,"nor:",t.v[j].normal);
-	      parse_doubles(file,"dif:",t.v[j].color_diffuse);
-	      parse_doubles(file,"spe:",t.v[j].color_specular);
+	      parse_floats(file,"pos:",t.v[j].position);
+	      parse_floats(file,"nor:",t.v[j].normal);
+	      parse_floats(file,"dif:",t.v[j].color_diffuse);
+	      parse_floats(file,"spe:",t.v[j].color_specular);
 	      parse_shi(file,&t.v[j].shininess);
 	    }
 
@@ -211,10 +408,10 @@ int loadScene(char *argv)
 	{
 	  printf("found sphere\n");
 
-	  parse_doubles(file,"pos:",s.position);
+	  parse_floats(file,"pos:",s.position);
 	  parse_rad(file,&s.radius);
-	  parse_doubles(file,"dif:",s.color_diffuse);
-	  parse_doubles(file,"spe:",s.color_specular);
+	  parse_floats(file,"dif:",s.color_diffuse);
+	  parse_floats(file,"spe:",s.color_specular);
 	  parse_shi(file,&s.shininess);
 
 	  if(num_spheres == MAX_SPHERES)
@@ -227,8 +424,8 @@ int loadScene(char *argv)
       else if(_stricmp(type,"light")==0)
 	{
 	  printf("found light\n");
-	  parse_doubles(file,"pos:",l.position);
-	  parse_doubles(file,"col:",l.color);
+	  parse_floats(file,"pos:",l.position);
+	  parse_floats(file,"col:",l.color);
 
 	  if(num_lights == MAX_LIGHTS)
 	    {
@@ -269,7 +466,7 @@ void idle()
   if(!once)
   {
       draw_scene();
-      if(mode == MODE_JPEG)
+      //if(mode == MODE_JPEG)
 		save_jpg();
     }
   once=1;
