@@ -77,10 +77,6 @@ void saveScreenshot (char *filename)
   free(p);
   printf("File to save to: %s\n", filename);
   img.mirror('y');
-  //CImgDisplay main_disp(img, "Snapshot");
-  //while (!main_disp.is_closed()) {
-	 // main_disp.wait();
-  //}
 
   img.save(filename);
 }
