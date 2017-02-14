@@ -19,8 +19,10 @@ using namespace cimg_library;
 #include <GL/glu.h>
 #include <GL/glut.h>
 
-CImg<unsigned char> landImg;
-CImg<unsigned char> skyImg;
+
+
+GLuint texture[1];
+
 int winWidth(640), winHeight(480);
 
 /* represents one control point along the spline */
@@ -92,15 +94,41 @@ int loadSplines(char *argv) {
 
 	return 0;
 }
+void texload(int i, char *filename)
+{
+	CImg<unsigned char> img(filename);
+	//img.permute_axes("cxyz"); // no time to find why it does not work.
 
+	unsigned char *tex = new unsigned char[img.height()*img.width() * 4];
+	int p = 0;
+	for (int i = 0; i < img.height(); ++i) {
+		for (int j = 0; j < img.width(); ++j) {
+			tex[p++] = img(i, j, 0, 0);
+			tex[p++] = img(i, j, 0, 1);
+			tex[p++] = img(i, j, 0, 2);
+			tex[p++] = 255;
+		}
+	}
+
+
+	glBindTexture(GL_TEXTURE_2D, texture[i]);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.width(), img.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.width(), img.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex);
+	delete[] tex;
+}
 void myinit()
 {
 	/* setup gl view here */
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glEnable(GL_DEPTH_TEST);            // enable depth buffering
 	glShadeModel(GL_SMOOTH);            // interpolate colors during rasterization
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	glGenTextures(1, texture);
+	texload(0, "test.jpg");//OhioPyle-128.jpg
 
 }
+
 void toPerspective()
 {
 	// set viewport to be the entire window
@@ -133,27 +161,29 @@ Vector crSpline(float u, Point* points, int sid = 0, float s=0.5)
 {
 	CImg<float> U(4, 1, 1, 1); //Vector U(u*u*u, u*u, u, 1);
 	int j = 0;
-	U(j, 0) = u*u*u; U(j, 1) = u*u; U(j, 2) = u; U(j, 3) = 1;
+	U(0, j) = u*u*u; U(1,j) = u*u; U(2,j) = u; U(3,j) = 1;
 	
 	CImg<float> C(3, 4, 1, 1); //Matrix C; // control matrix;
 	for (int i = 0; i < 4; ++i) 
 	{
-		C(i, 0) = points[sid+i].x; C(i, 1) = points[sid+i].y; C(i, 2) = points[sid+i].z;
+		C(0,i) = points[sid+i].x; C(1, i) = points[sid+i].y; C(2, i) = points[sid+i].z;
 	}
 	
 	CImg<float> B(4, 4, 1, 1); //Matrix B; // basis matrix;
 	j = 0;
-	B(j, 0) = -s; B(j, 1) = 2-s; B(j, 2) = s-2; B(j, 3) = s;
+	B(0,j) = -s; B(1, j) = 2-s; B(2, j) = s-2; B(3, j) = s;
 	j = 1;
-	B(j, 0) = 2*s; B(j, 1) = s-3; B(j, 2) = 3 - 2*s; B(j, 3) = -s;
+	B(0, j) = 2*s; B(1, j) = s-3; B(2, j) = 3 - 2*s; B(3, j) = -s;
 	j = 2;
-	B(j, 0) = -s; B(j, 1) = 0; B(j, 2) = s; B(j, 3) = 0;
+	B(0, j) = -s; B(1, j) = 0; B(2, j) = s; B(3, j) = 0;
 	j = 3;
-	B(j, 0) = 0; B(j, 1) = 1; B(j, 2) = 0; B(j, 3) = 0;
+	B(0, j) = 0; B(1, j) = 1; B(2, j) = 0; B(3, j) = 0;
 	
 	CImg<float> val = U * B * C;
-	Vector tmp(val(0, 0), val(0, 1), val(0, 2));
-	return tmp;// todo 乘法结果不对， 都和ppt比对过了呀。把控制矩阵换换试试
+	//CImg<float> val1 = U * B;
+	//CImg<float> val2 = B * C;
+	Vector tmp(val(0, 0), val(1, 0), val(2, 0));
+	return tmp;
 }
 // sid: id of the start control points in points
 void subdivide(float u0, float u1, Point* points, int sid=0, float maxLen=0.01)
@@ -181,22 +211,66 @@ void display()
 	gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 	
 
+	///////////////////////////////////////////////////
+	// draw some texture mapped objects
+	///////////////////////////////////////////////////
+	// turn on texture mapping (this disables standard OpenGL lighting, unless in GL_MODULATE mode)
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
+	// back
+	glBegin(GL_POLYGON);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(1.0, -1.0, -1.0);
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(-1.0, -1.0, -1.0);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(-1.0, 1.0, -1.0);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(1.0, 1.0, -1.0);
+	glEnd();
+
+	// bottom
+	glBegin(GL_POLYGON);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(1.0, -1.0, 1.0);
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(-1.0, -1.0, 1.0);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(-1.0, -1.0, -1.0);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(1.0, -1.0, -1.0);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
+	// turn off texture mapping
+	glDisable(GL_TEXTURE_2D);
+
+
+	///////////////////////////////////////////////////
+	// draw some non-texture mapped objects
+	///////////////////////////////////////////////////
 	for (int i = 0; i < g_iNumOfSplines; ++i)
 	{
 		Spline sp = g_Splines[i];
 		// draw control points
 		glColor3f(0.0, 1.0, 0.0);
-		glLineWidth(1.0);
-		glBegin(GL_LINE_STRIP);			
+		//glEnable(GL_PROGRAM_POINT_SIZE);
+		glPointSize(3.0);
+		glBegin(GL_POINTS);	glBegin(GL_LINE_STRIP);
 		for (int j = 0; j < sp.numControlPoints; ++j)
 			glVertex3f(sp.points[j].x, sp.points[j].y, sp.points[j].z);
 		glEnd();
 
+		///////////////////
 		glColor3f(1.0, 0.0, 0.0);
-		glLineWidth(3.0);
-		glBegin(GL_LINE);		
-		// draw control points
-		for (int j = 0; j < sp.numControlPoints; ++j)
+		glLineWidth(1.0);
+		glBegin(GL_LINES);		
+		for (int j = 0; j < sp.numControlPoints-3; ++j)
 		{	
 			subdivide(0, 1, sp.points, j);
 		}
