@@ -20,6 +20,10 @@ void display()
 	// clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity(); // reset transformation
+	float mat[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+	int depth;
+	glGetIntegerv(GL_MODELVIEW_STACK_DEPTH, &depth);
 
 	// draw axis
 	glPointSize(5.0);
@@ -31,6 +35,8 @@ void display()
 	glVertex3f(0.0, 1.0, -10.0);
 	glVertex3f(0.0, 2.0, -10.0);
 	glEnd();
+
+	//glutSolidSphere(0.6f, 20, 20);
 
 	// draw triangle 1
 	glBegin(GL_TRIANGLES);
@@ -83,6 +89,7 @@ void reshape(int w, int h)
 
 	// setup camera
 	glFrustum(-0.1, 0.1, -float(h) / (10.0*float(w)), float(h) / (10.0*float(w)), 0.5, 1000.0);
+	//gluLookAt(0, 0, 2,  0, 0, 0,   0, 1, 0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
