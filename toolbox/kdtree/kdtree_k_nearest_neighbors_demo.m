@@ -92,9 +92,9 @@
 % test 3: check if distances returned are correct!
 clc, clear, close all
 rand('twister',1);
-p = rand( 1000,  4 ); % input data
-q = [ .5, .5, .5, .5 ]; 
-k = 10;
+p = rand( 1000,  2 ); % input data
+q = [ .5, .5 ]; 
+k = 100;
 
 % execute query by kd-tree and by linear scan
 tree = kdtree_build( p );
