@@ -17,8 +17,8 @@ end
 
 function fid = compute_lss_hard(A, b, constraint_id, constraint_value,solver)
 % jjcao
-switch solver,
-    case 1
+switch solver
+    case 1 % worked both for b with 1 column or multi-column
         b(constraint_id,:) = constraint_value;
         A(constraint_id,:) = 0;
         n = size(A,1);
@@ -47,7 +47,7 @@ switch solver,
         
         fid(constraint_id) = constraint_value;
         fid = fid';
-    case 3
+    case 3 % worked just for b with 1 column
         uind = 1:size(A,1);
         uind(constraint_id) = [];
         A_uu = A(uind,uind);
