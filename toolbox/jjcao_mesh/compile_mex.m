@@ -4,7 +4,7 @@
 % Copyright (c) 2012 Junjie Cao
 
 mex adjacency_matrix.cpp
-mex minimaAndMaxima.cpp
+%mex minimaAndMaxima.cpp
 
 % mex -g -largeArrayDims -I"../../include/eigen-3.1.3" vertex_area.cpp % for debuging
 mex -largeArrayDims -I"../../include/eigen-3.1.3" vertex_area.cpp

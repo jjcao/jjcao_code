@@ -85,7 +85,7 @@ double cotangent(const Vector3d& P,
 //        return 0.0; // undefined
 //}
 
-void compute_dcp_weight(double* verts, double* faces, int nverts, int nfaces, SparseMatrix<double>& sm)
+void compute_dcp_weight(double* verts, int* faces, int nverts, int nfaces, SparseMatrix<double>& sm)
 {
 	int i,j,m;
 	double dtmp;
@@ -111,12 +111,12 @@ void compute_dcp_weight(double* verts, double* faces, int nverts, int nfaces, Sp
 	}
 }
 
-void perform_mesh_weight(double* verts, int nverts, double *faces, int nfaces, int type, double *vert_areas, SparseMatrix<double>& sm)
+void perform_mesh_weight(double* verts, int nverts, int *faces, int nfaces, int type, double *vert_areas, SparseMatrix<double>& sm)
 {	
 	switch(type)
 	{
 	case 0: //'combinatorial' or 'graph'
-		// ²»ÄÜ´¦Àí¿ªÍø¸ñ
+		// ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 		int i,j;	
 		std::vector<T> coef(nverts*6);	
@@ -183,8 +183,14 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 	if(row != 3)
 		mexErrMsgTxt("The mesh must be triangle mesh! it is excepted to be 3*n");
 
-	double* faces = mxGetPr(prhs[1]);
-
+	double* dfaces = mxGetPr(prhs[1]);
+    int* faces = new int[nfaces*3];
+    for(int i = 0; i < nfaces*3; ++i)
+    {
+        faces[i] = int(dfaces[i]);
+		--faces[i];
+    }
+    
 	// input 3: type
 	double* type = mxGetPr(prhs[2]);
 	
@@ -206,10 +212,7 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 		}
 	}
 
-	///////////////////////////////////////////////	
-	for(int i = 0; i < nfaces*3; ++i)
-		--faces[i];
-	
+	///////////////////////////////////////////////		
 	SparseMatrix<double> sm(nverts, nverts);
 	perform_mesh_weight(verts, nverts, faces, nfaces, *type, vert_areas, sm);
 
@@ -243,4 +246,6 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 	}
 	//long ltmp = outerInd[nverts];
 	jcs[nverts]=outerInd[nverts];
+    
+    delete[] faces;
 }
