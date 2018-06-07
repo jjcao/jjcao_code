@@ -1,4 +1,4 @@
-function [vertex,faces,normals,uv] = read_obj(filename)
+function [vertex,faces,vt,vn,normals,uv] = read_obj(filename)
 
 % read_obj - load a .obj file.
 %
@@ -8,7 +8,7 @@ function [vertex,faces,normals,uv] = read_obj(filename)
 %   vertex  : node vertexinatates
 %   normal : normal vector list
 %
-%   Changed by Junjie Cao 2012
+%   Changed by Junjie Cao @ 2012, and Shuangtao Wang @ 2018
 %   Copyright (c) 2008 Gabriel Peyre
 
 fid = fopen(filename);
@@ -38,32 +38,30 @@ vertex = [];
 faces = [];
 normals = [];
 uv = [];
+vt = [];
+vn = [];
 while 1
     s = fgetl(fid);
     if ~ischar(s), 
         break;
     end
-    if isempty(s) 
-        continue;
-    end
-    
-    if strcmp(s(1), 'f')% face
+    if ~isempty(s) && strcmp(s(1), 'f')% face
         idx = strfind(s, '/');
         if isempty(idx)
             faces(end+1,:) = sscanf(s(3:end), '%d %d %d');
         else
             s(idx) = ' ';
-            tmp = sscanf(s(3:end), '%d %d %d %d %d %d');
-            faces(end+1,:) = tmp(1:length(tmp)/3:end);
+            tmp = sscanf(s(3:end), '%d %d %d %d %d');
+            faces(end+1,:) = tmp(1:3:end);
+            vt(end+1,:) = tmp(2:3:end);
+            vn(end+1,:) = tmp(3:3:end);
         end
-    elseif length(s) >1
-        if strcmp(s(1:2), 'v ') % vertex
-            vertex(end+1,:) = sscanf(s(3:end), '%f %f %f');
-        elseif strcmp(s(1:2), 'vn') % vertex normal
-            normals(end+1,:) = sscanf(s(3:end), '%f %f %f');
-        elseif strcmp(s(1:2), 'vt') % texture uv
-            uv(end+1,:) = sscanf(s(3:end), '%f %f');        
-        end
+    elseif ~isempty(s) && strcmp(s(1:2), 'v ') % vertex
+        vertex(end+1,:) = sscanf(s(3:end), '%f %f %f');
+    elseif ~isempty(s) && strcmp(s(1:2), 'vn') % vertex normal
+        normals(end+1,:) = sscanf(s(3:end), '%f %f %f');
+    elseif ~isempty(s) && strcmp(s(1:2), 'vt') % texture uv
+        uv(end+1,:) = sscanf(s(3:end), '%f %f');        
     end
 end
 fclose(fid);

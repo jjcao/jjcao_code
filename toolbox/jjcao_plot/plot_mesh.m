@@ -173,7 +173,7 @@ if ~isempty(normal)
     hold off;
 end
 
-cameramenu;
+cameratoolbar;
 set_view(name, view_param);
 shading(shading_type);
 camlight;
