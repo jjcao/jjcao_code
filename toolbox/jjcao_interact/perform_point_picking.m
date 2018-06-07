@@ -1,4 +1,4 @@
-function  perform_point_picking( PointCloud, face )
+function  PointCloud = perform_point_picking( PointCloud, face )
 
 % function    perform_point_picking( PointCloud, face );
 %
@@ -34,7 +34,7 @@ if nargin==2
 end
 plot3(PointCloud(1,:), PointCloud(2,:), PointCloud(3,:), 'c.'); % visualize the point cloud
 hold on; % so we can highlight the clicked points without clearing the point cloud
-cameramenu;
+cameratoolbar;
 
 global PointCloudIndex;
 set(gcf,'WindowButtonDownFcn',{@callbackClickA3DPoint,PointCloud}); % set the callbak
@@ -124,7 +124,7 @@ fprintf('you clicked on point number %d\n', PointCloudIndex);
 % output:   N (an m*1 vector)
 %
 
-function N = RowNorm(A);
+function N = RowNorm(A)
 
 N = sqrt(sum(A.*A, 2));
 
