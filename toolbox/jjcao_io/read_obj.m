@@ -1,13 +1,17 @@
-function [vertex,faces,vt,vn,normals,uv] = read_obj(filename)
+function [vertices,faces,veterx_normal,vertex_texture,face_texture,face_normal] = read_obj(filename)
 
 % read_obj - load a .obj file.
 %
-%   [vertex,face,normal,uv] = read_obj(filename);
+%   [vertices,faces,veterx_normal,vertex_texture,face_texture,face_normal] = read_obj(filename);
 %
-%   faces    : list of facesangle elements
-%   vertex  : node vertexinatates
-%   normal : normal vector list
+%   vertices  : coordinates array
+%   faces    : index of vertices
+%   veterx_normal: normal of vertices
+%   vertex_texture: texture of vertices
+%   face_texture: index of texture
+%   face_normal: index of normal
 %
+%   refer to: https://en.wikipedia.org/wiki/Wavefront_.obj_file#Face_elements
 %   Changed by Junjie Cao @ 2012, and Shuangtao Wang @ 2018
 %   Copyright (c) 2008 Gabriel Peyre
 
@@ -24,8 +28,8 @@ if strcmp(a, 'P')
     % needed. It will be provided upon request.
     fscanf(fid,'%f',5);
     n_points=fscanf(fid,'%i',1);
-    vertex=fscanf(fid,'%f',[3,n_points])';
-    normals=fscanf(fid,'%f',[3,n_points])';
+    vertices=fscanf(fid,'%f',[3,n_points])';
+    veterx_normal=fscanf(fid,'%f',[3,n_points])';
     n_faces=fscanf(fid,'%i',1);
     fscanf(fid,'%i',5+n_faces);
     faces=fscanf(fid,'%i',[3,n_faces])+1;
@@ -34,15 +38,15 @@ if strcmp(a, 'P')
 end
 
 frewind(fid);
-vertex = [];
+vertices = [];
 faces = [];
-normals = [];
-uv = [];
-vt = [];
-vn = [];
+veterx_normal = [];
+vertex_texture = [];
+face_texture = [];
+face_normal = [];
 while 1
     s = fgetl(fid);
-    if ~ischar(s), 
+    if ~ischar(s) 
         break;
     end
     if ~isempty(s) && strcmp(s(1), 'f')% face
@@ -53,15 +57,15 @@ while 1
             s(idx) = ' ';
             tmp = sscanf(s(3:end), '%d %d %d %d %d');
             faces(end+1,:) = tmp(1:3:end);
-            vt(end+1,:) = tmp(2:3:end);
-            vn(end+1,:) = tmp(3:3:end);
+            face_texture(end+1,:) = tmp(2:3:end);
+            face_normal(end+1,:) = tmp(3:3:end);
         end
-    elseif ~isempty(s) && strcmp(s(1:2), 'v ') % vertex
-        vertex(end+1,:) = sscanf(s(3:end), '%f %f %f');
-    elseif ~isempty(s) && strcmp(s(1:2), 'vn') % vertex normal
-        normals(end+1,:) = sscanf(s(3:end), '%f %f %f');
+    elseif ~isempty(s) && strcmp(s(1:2), 'v ') % vertices
+        vertices(end+1,:) = sscanf(s(3:end), '%f %f %f');
+    elseif ~isempty(s) && strcmp(s(1:2), 'vn') % vertices normal
+        veterx_normal(end+1,:) = sscanf(s(3:end), '%f %f %f');
     elseif ~isempty(s) && strcmp(s(1:2), 'vt') % texture uv
-        uv(end+1,:) = sscanf(s(3:end), '%f %f');        
+        vertex_texture(end+1,:) = sscanf(s(3:end), '%f %f');        
     end
 end
 fclose(fid);
