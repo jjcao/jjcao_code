@@ -2,10 +2,11 @@ function write_off(filename, vertex, face, normal)
 
 % write_off - write a mesh or a point cloud with or without normals to a OFF file
 %
-%   write_off(filename, vertex, face);
+%   write_off(filename, vertex, face, normal);
 %
 %   vertex must be of size [n,3]
 %   face must be of size [p,3] or empty
+%   you can also use vertex color as normal
 %
 %   Copyright (c) 2003 Gabriel Peyr?
 %   Changed by (2009) JJCAO
