@@ -216,8 +216,8 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 	SparseMatrix<double> sm(nverts, nverts);
 	perform_mesh_weight(verts, nverts, faces, nfaces, *type, vert_areas, sm);
 
-	Index* innerInd = sm.innerIndexPtr();
-	Index* outerInd = sm.outerIndexPtr();
+	SparseMatrix<double>::StorageIndex* innerInd = sm.innerIndexPtr();
+	SparseMatrix<double>::StorageIndex* outerInd = sm.outerIndexPtr();
 	Scalar* valuePtr = sm.valuePtr();
 
 	///////////////////////////////////////////////
