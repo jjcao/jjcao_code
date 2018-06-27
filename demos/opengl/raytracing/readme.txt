@@ -1,1 +1,0 @@
-Hao Li-CSCI 420-Ex3-Ray Tracing-cimg-libjpeg-vc15

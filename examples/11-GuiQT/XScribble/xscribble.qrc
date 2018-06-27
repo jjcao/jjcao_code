@@ -1,8 +1,0 @@
-<RCC>
-  <qresource prefix="XScribble">
-    <file>Resources/scribble1.jpg</file>
-    <file>Resources/radius.gif</file>
-    <file>Resources/line_32.png</file>
-    <file>Resources/filesaveas.png</file>
-  </qresource>
-</RCC>

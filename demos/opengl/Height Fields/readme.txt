@@ -1,1 +1,0 @@
-Hao Li-CSCI 420-Ex1-Height Fields-cimg-libjpeg-vc15
