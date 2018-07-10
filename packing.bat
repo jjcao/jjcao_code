@@ -2,6 +2,7 @@
 
 del *.ncb /s
 del *.sdf /s
+del *.VC.db /s
 del *.asv /s
 del UpgradeLog.XML /s
 
